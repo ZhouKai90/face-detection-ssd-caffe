@@ -15,7 +15,8 @@ Detector::Detector(const std::string & prototxtFile,
     Blob<float>* inputLayer = net_->input_blobs()[0];
     numChannles_ = inputLayer->channels();
     CHECK(numChannles_ == 3 || numChannles_ == 1) << "Input layer should have 1 or 3 channels.";
-    inputGeometry_ = cv::Size(inputLayer->width(), inputLayer->height());
+    inputGeometry_ = cv::Size(IMG_WIDTH, IMG_HEIGHT);
+    // inputGeometry_ = cv::Size(inputLayer->width(), inputLayer->height());
     printf("channles:%d, width:%d, height:%d\n", numChannles_, inputLayer->width(), inputLayer->height());
     Blob<float>* outputLayer = net_->output_blobs()[0];
     printf("Out put layers channels:%d\n", outputLayer->channels());
