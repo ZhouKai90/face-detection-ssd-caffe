@@ -1,14 +1,12 @@
 # face detection SSD: Single Shot MultiBox Object Detector for face detection
 
 SSD is an unified framework for object detection with a single network.
-
 caffe base on `https://github.com/weiliu89/caffe.git`.
 
 ### Demo results
 
-![](https://github.com/ZhouKai90/face-detection-ssd-mxnet/blob/master/test/images/image%20(6)_detection.jpg)
-![](https://github.com/ZhouKai90/face-detection-ssd-mxnet/blob/master/test/images/image%20(7)_detection.jpg)
-![](https://github.com/ZhouKai90/face-detection-ssd-mxnet/blob/master/test/images/image%20(5)_detection.jpg)
+![](https://github.com/ZhouKai90/face-detection-ssd-caffe/blob/master/output/1920x1080_1.jpg)
+![](https://github.com/ZhouKai90/face-detection-ssd-caffe/blob/master/output/1920x1080_4.jpg)
 
 ### Try the demo
 
