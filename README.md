@@ -13,5 +13,5 @@ caffe base on `https://github.com/weiliu89/caffe.git`.
 ```
 mkdir build
 cd build && cmake .. && make && cd ..
-./build/unit_test/target images
+./build/demo/target images
 ```

@@ -14,4 +14,4 @@ find_package(CUDA)
 find_package(Boost REQUIRED COMPONENTS system filesystem)
 
 add_subdirectory(src)
-add_subdirectory(unit_test)
+add_subdirectory(demo)
