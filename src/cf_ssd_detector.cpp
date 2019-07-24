@@ -1,7 +1,7 @@
 #include "cf_ssd_config.hh"
 #include "cf_ssd_detector.hh"
 
-Detector::Detector(const std::string & prototxtFile,
+SingleDetector::SingleDetector(const std::string & prototxtFile,
                     const std::string & caffemodelFile)
 {
     Caffe::set_mode(Caffe::GPU);
@@ -15,19 +15,19 @@ Detector::Detector(const std::string & prototxtFile,
     Blob<float>* inputLayer = net_->input_blobs()[0];
     numChannles_ = inputLayer->channels();
     CHECK(numChannles_ == 3 || numChannles_ == 1) << "Input layer should have 1 or 3 channels.";
-    inputGeometry_ = cv::Size(IMG_WIDTH, IMG_HEIGHT);
-    // inputGeometry_ = cv::Size(inputLayer->width(), inputLayer->height());
+    inputGeometry_ = cv::Size(inputLayer->width(), inputLayer->height());
     printf("channles:%d, width:%d, height:%d\n", numChannles_, inputLayer->width(), inputLayer->height());
     Blob<float>* outputLayer = net_->output_blobs()[0];
     printf("Out put layers channels:%d\n", outputLayer->channels());
 
 }
 
-std::vector<facesPerImg_t> Detector::run(const std::vector<cv::Mat>& imgs)
+std::vector<facesPerImg_t> SingleDetector::run(const std::vector<cv::Mat>& imgs)
 {
     std::vector<facesPerImg_t> result;
     for (auto img : imgs) {
         facesPerImg_t tmp;
+        memset(&tmp, 0 ,sizeof(facesPerImg_t));
         std::vector<vector<float>> output = Detect(img);
         if (output.size() == 0) {
             printf("No face detected.\n");
@@ -38,6 +38,7 @@ std::vector<facesPerImg_t> Detector::run(const std::vector<cv::Mat>& imgs)
         tmp.hasFace = true;
         for (auto bbox: output) {
             bbox_t box;
+            memset(&box, 0 ,sizeof(bbox_t));
             tmp.faceCnt += 1;
             assert(bbox.size() == 7);
             box.score = bbox[2];
@@ -47,13 +48,28 @@ std::vector<facesPerImg_t> Detector::run(const std::vector<cv::Mat>& imgs)
             box.y2 = bbox[6];
             tmp.faces.push_back(box);
         }
+        assert(tmp.faceCnt == tmp.faces.size());
         result.push_back(tmp);
     }
     return result;
 }
 
-std::vector<vector<float>> Detector::Detect(const cv::Mat& img) 
+std::vector<vector<float>> SingleDetector::Detect(const cv::Mat& img) 
 {
+    int width = img.cols;
+    int height = img.rows;
+    int channels = img.channels();
+
+    if (width > height) {       // 以最长边为基准，等比例缩放图像
+        resizeFactor_ = static_cast<double>(width) / static_cast<double>(MAX_IMG);
+        inputGeometry_.height = static_cast<int>(MAX_IMG / static_cast<float>(width) * height);
+        inputGeometry_.width = MAX_IMG;
+    } else {
+        resizeFactor_ = static_cast<double>(height) / static_cast<double>(MAX_IMG);
+        inputGeometry_.width = static_cast<int>(MAX_IMG / static_cast<float>(height) * width);
+        inputGeometry_.height = MAX_IMG;
+    }
+
     Blob<float>* inputLayer = net_->input_blobs()[0];
     inputLayer->Reshape(1, numChannles_, inputGeometry_.height, inputGeometry_.width);
     net_->Reshape();
@@ -70,7 +86,7 @@ std::vector<vector<float>> Detector::Detect(const cv::Mat& img)
     const int num_det = resultBlob->height();
     std::vector<std::vector<float> > detections;
     for (int k = 0; k < num_det; ++k) {
-        if (result[0] == -1 || result[2] < 0.5) {
+        if (result[0] == -1 || result[2] < FACE_SCORE) {
         // Skip invalid detection.
         result += 7;
         continue;
@@ -82,7 +98,7 @@ std::vector<vector<float>> Detector::Detect(const cv::Mat& img)
     return detections;
 }
 
-void Detector::wrap_input_layer(std::vector<cv::Mat>* inputChannels)
+void SingleDetector::wrap_input_layer(std::vector<cv::Mat>* inputChannels)
 {
     Blob<float>* inputLayer = net_->input_blobs()[0];
 
@@ -96,7 +112,7 @@ void Detector::wrap_input_layer(std::vector<cv::Mat>* inputChannels)
     }
 }
 
-void Detector::preprocess(const cv::Mat& img, std::vector<cv::Mat>* inputChannels)
+void SingleDetector::preprocess(const cv::Mat& img, std::vector<cv::Mat>* inputChannels)
 {
     cv::Mat sample;
     if (img.channels() == 3 || img.channels() == 1)

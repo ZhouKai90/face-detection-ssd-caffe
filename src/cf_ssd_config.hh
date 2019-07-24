@@ -3,11 +3,14 @@
 
 #include <string>
 
-#define IMG_WIDTH 1920 * 0.8
-#define IMG_HEIGHT 1080 * 0.8
+#define FACE_SCORE 0.8
 
-const std::string ROOT_PATH = "/kyle/workspace/project/caffe_ssd";
-const std::string PROTOTXT =  ROOT_PATH + "/models/ssd_vgg16_512.prototxt";
-const std::string CAFFEMODEL = ROOT_PATH + "/models/ssd_vgg16_512.caffemodel";
+#define MAX_IMG 800
+
+const std::string ROOT_PATH = "/xx/xx/caffe_ssd";
+const std::string MODEL_PATH = ROOT_PATH + "/models";
+const std::string OUTPUT_PATH = ROOT_PATH + "/output";
+const std::string PROTOTXT = "/ssd_vgg16_512.prototxt";
+const std::string CAFFEMODEL = "/ssd_vgg16_512.caffemodel";
 
 #endif

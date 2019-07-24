@@ -1126,15 +1126,15 @@ layer {
   bottom: "data"
   top: "relu4_3_anchors"
   prior_box_param {
-    min_size: 35.84000015258789
+    min_size: 36.0
     max_size: 77.0
     aspect_ratio: 1.0
     flip: false
     clip: false
-    variance: 0.10000000149011612
-    variance: 0.10000000149011612
-    variance: 0.20000000298023224
-    variance: 0.20000000298023224
+    variance: 0.1
+    variance: 0.1
+    variance: 0.2
+    variance: 0.2
     step: 8.0
   }
 }
@@ -1154,15 +1154,15 @@ layer {
   bottom: "data"
   top: "relu7_anchors"
   prior_box_param {
-    min_size: 76.80000305175781
+    min_size: 77.0
     max_size: 154.0
     aspect_ratio: 1.0
     flip: false
     clip: false
-    variance: 0.10000000149011612
-    variance: 0.10000000149011612
-    variance: 0.20000000298023224
-    variance: 0.20000000298023224
+    variance: 0.1
+    variance: 0.1
+    variance: 0.2
+    variance: 0.2
     step: 16.0
   }
 }
@@ -1182,15 +1182,15 @@ layer {
   bottom: "data"
   top: "multi_feat_2_conv_3x3_relu_anchors"
   prior_box_param {
-    min_size: 153.60000610351562
+    min_size: 154.0
     max_size: 230.0
     aspect_ratio: 1.0
     flip: false
     clip: false
-    variance: 0.10000000149011612
-    variance: 0.10000000149011612
-    variance: 0.20000000298023224
-    variance: 0.20000000298023224
+    variance: 0.1
+    variance: 0.1
+    variance: 0.2
+    variance: 0.2
     step: 32.0
   }
 }
@@ -1210,15 +1210,15 @@ layer {
   bottom: "data"
   top: "multi_feat_3_conv_3x3_relu_anchors"
   prior_box_param {
-    min_size: 230.39999389648438
+    min_size: 230.0
     max_size: 307.0
     aspect_ratio: 1.0
     flip: false
     clip: false
-    variance: 0.10000000149011612
-    variance: 0.10000000149011612
-    variance: 0.20000000298023224
-    variance: 0.20000000298023224
+    variance: 0.1
+    variance: 0.1
+    variance: 0.2
+    variance: 0.2
     step: 64.0
   }
 }
@@ -1238,15 +1238,15 @@ layer {
   bottom: "data"
   top: "multi_feat_4_conv_3x3_relu_anchors"
   prior_box_param {
-    min_size: 307.20001220703125
+    min_size: 307.0
     max_size: 384.0
     aspect_ratio: 1.0
     flip: false
     clip: false
-    variance: 0.10000000149011612
-    variance: 0.10000000149011612
-    variance: 0.20000000298023224
-    variance: 0.20000000298023224
+    variance: 0.1
+    variance: 0.1
+    variance: 0.2
+    variance: 0.2
     step: 128.0
   }
 }
@@ -1271,10 +1271,10 @@ layer {
     aspect_ratio: 1.0
     flip: false
     clip: false
-    variance: 0.10000000149011612
-    variance: 0.10000000149011612
-    variance: 0.20000000298023224
-    variance: 0.20000000298023224
+    variance: 0.1
+    variance: 0.1
+    variance: 0.2
+    variance: 0.2
     step: 256.0
   }
 }
@@ -1294,15 +1294,15 @@ layer {
   bottom: "data"
   top: "multi_feat_6_conv_3x3_relu_anchors"
   prior_box_param {
-    min_size: 460.79998779296875
+    min_size: 461.0
     max_size: 538.0
     aspect_ratio: 1.0
     flip: false
     clip: false
-    variance: 0.10000000149011612
-    variance: 0.10000000149011612
-    variance: 0.20000000298023224
-    variance: 0.20000000298023224
+    variance: 0.1
+    variance: 0.1
+    variance: 0.2
+    variance: 0.2
     step: 512.0
   }
 }

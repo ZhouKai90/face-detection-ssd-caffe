@@ -1,12 +1,13 @@
 #include "inf_face_detection_ssd_api.hh"
 #include "cf_ssd_detector.hh"
+#include "cf_ssd_config.hh"
 
 FDHandle inf_face_detection_ssd_init(const std::string &modelPath)
 {
-    const std::string prototxt = modelPath + "/ssd_vgg16_512.prototxt";
-    const std::string caffemodel = modelPath + "/ssd_vgg16_512.caffemodel";
+    const std::string prototxt = modelPath + PROTOTXT;
+    const std::string caffemodel = modelPath + CAFFEMODEL;
 
-    Detector *handle = new Detector(prototxt, caffemodel);
+    SingleDetector *handle = new SingleDetector(prototxt, caffemodel);
     std::cout << "facial expression recongnize handle init succeed." << std::endl;
     return (FDHandle) handle;
 }
@@ -14,7 +15,7 @@ FDHandle inf_face_detection_ssd_init(const std::string &modelPath)
 infResult inf_face_detection_ssd_uint(FDHandle handle)
 {
     if (handle != NULL) {
-        Detector* handle = (Detector*) handle;
+        SingleDetector* handle = (SingleDetector*) handle;
         delete handle;
     }
 
@@ -29,7 +30,7 @@ infResult inf_face_detecte(FDHandle handle, const std::vector<cv::Mat>& imgsMat,
         std::cout << "handle is NULL" << std::endl;
         return INF_FAIL;
     }
-    Detector* DetectorHandle = (Detector*) handle;
+    SingleDetector* DetectorHandle = (SingleDetector*) handle;
     list = DetectorHandle->run(imgsMat);
     return INF_SUCCESS;
 }

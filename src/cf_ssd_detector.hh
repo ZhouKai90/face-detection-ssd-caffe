@@ -12,11 +12,11 @@
 #include "inf_face_detection_ssd_api.hh"
 using namespace caffe;
 
-class Detector {
+class SingleDetector {
 public:
-    Detector(const std::string& prototxtFile,
+    SingleDetector(const std::string& prototxtFile,
             const std::string& caffemodelFile);
-    ~Detector(){printf("~Detector\n");};
+    ~SingleDetector(){printf("~SingleDetector\n");};
     std::vector<facesPerImg_t> run(const std::vector<cv::Mat>& imgs);
 
 private:
@@ -28,6 +28,7 @@ private:
     shared_ptr<Net<float>> net_;
     cv::Size inputGeometry_;
     int numChannles_;
+    double resizeFactor_;
 };
 
 #endif
