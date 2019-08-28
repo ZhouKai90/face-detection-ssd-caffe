@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
-project(CAFFE_SSD)
+project(CAFFE_SSD_DEMO)
 
 include(CheckCXXCompilerFlag)
 CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
@@ -41,6 +41,7 @@ set(LINKER_EXT_LIBS
     ${Boost_LIBRARIES}
     ${CUDA_LIBRARIES}
     libcaffe.so
+    "/usr/lib/x86_64-linux-gnu/libglog.so.0"
 )
 
 add_executable(demo ${DEMO_FILE})

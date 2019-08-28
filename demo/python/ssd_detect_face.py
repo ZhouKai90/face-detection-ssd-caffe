@@ -203,16 +203,16 @@ def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--gpu_id', type=int, default=1, help='gpu id')
     parser.add_argument('--labelmap_file',
-                        default=os.path.join(os.getcwd(), '../', 'models/deploy/labelmap_face.prototxt'))
+                        default=os.path.join(os.getcwd(), '../../', 'models/deploy/labelmap_face.prototxt'))
     parser.add_argument('--model_def',
-                       default=os.path.join(os.getcwd(), '../', 'models/ssd_vgg16_512.prototxt'))
+                       default=os.path.join(os.getcwd(), '../../', 'models/deploy/ssd_vgg16_512.prototxt'))
                     #    default=os.path.join(os.getcwd(), '../', 'models/inception_ssd_640.prototxt'))
     parser.add_argument('--data_shape', default=(300, 300), type=int)
     parser.add_argument('--model_weights',
-                        default=os.path.join(os.getcwd(), '../', 'models/ssd_vgg16_512.caffemodel'))
+                        default=os.path.join(os.getcwd(), '../../', 'models/deploy/ssd_vgg16_512.caffemodel'))
                         # default=os.path.join(os.getcwd(), '../', 'models/inception_ssd_640.caffemodel'))
-    parser.add_argument('--save_path', default=os.path.join(os.getcwd(), '../', 'output/'))
-    parser.add_argument('--image_dir', default=os.path.join(os.getcwd(), '../', 'images'))
+    parser.add_argument('--save_path', default=os.path.join(os.getcwd(), '../../', 'output/'))
+    parser.add_argument('--image_dir', default=os.path.join(os.getcwd(), '../../', 'images/'))
     return parser.parse_args()
 
 if __name__ == '__main__':

@@ -7,8 +7,10 @@ from caffe.model_libs import *
 config = edict()
 
 # The database file for training and test data. Created by tools/create_data.sh
-config.trainData = 'data/widerface/widerface_trainval_lmdb'
-config.testData = 'data/widerface/widerface_test_lmdb'
+# config.trainData = 'data/widerface/widerface_trainval_lmdb'
+config.trainData = 'data/lmdb/train_clean_devkit_train_lmdb'
+# config.testData = 'data/widerface/widerface_test_lnval_lmdb'
+config.testData = 'data/lmdb/train_clean_devkit_test_lmdb'
 config.modelPrefix = 'VGG16'
 config.savePath = 'models/widerface'
 # The pretrained model. We use the Fully convolutional reduced (atrous) VGGNet.
@@ -71,7 +73,7 @@ snapshot_prefix = "{}/{}".format(snapshot_dir, model_name)
 # job script path.
 job_file = "{}/{}.sh".format(job_dir, model_name)
 
-# Stores the test image names and sizes. Created by data/VOC0712/create_list.sh
+# Stores the test image names and sizes. Created by tools/create_list.sh
 name_size_file = "{}/test_name_size.txt".format(config.dataPath)
 
 # Stores LabelMapItem.

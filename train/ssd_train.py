@@ -155,7 +155,6 @@ def create_train_net():
 
     # Create the MultiBoxLossLayer.
     name = "mbox_loss"
-
     mbox_layers.append(net.label)
     net[name] = L.MultiBoxLoss(*mbox_layers, multibox_loss_param=multibox_loss_param,
                                loss_param=loss_param, include=dict(phase=caffe_pb2.Phase.Value('TRAIN')),
@@ -165,8 +164,6 @@ def create_train_net():
         print('name: "{}_train"'.format(model_name), file=f)
         print(net.to_proto(), file=f)
     shutil.copy(train_net_file, job_dir)
-
-    create_deploy_net(net)
 
 def create_test_net():
     # Create test net.
@@ -244,6 +241,7 @@ def create_test_net():
         print('name: "{}_test"'.format(model_name), file=f)
         print(net.to_proto(), file=f)
     shutil.copy(test_net_file, job_dir)
+    create_deploy_net(net)
 
 def create_deploy_net(net):
     # Create deploy net.
