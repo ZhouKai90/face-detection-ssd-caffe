@@ -1,15 +1,17 @@
 from __future__ import print_function
 import caffe
 from caffe.model_libs import *
-from ssd_config import config as cf
-from ssd_config import *
-from ssd_symbol import AddExtraLayers
 import math
 import os
 import shutil
 import stat
 import subprocess
-from ssd_net_header import addSSDHeaderLayer
+from ssd_header_layers import addSSDHeaderLayer
+from ssd_config import config as cf
+from ssd_config import *
+from ssd_extra_feature_layers import AddExtraLayers
+from VGG16_reduce import reduceVGGNetBody
+from mobileNet_v1 import getMobileNetV1
 
 def create_train_net():
     # Create train net.
@@ -146,14 +148,14 @@ def create_train_net():
             train=True, output_label=True, label_map_file=label_map_file,
             transform_param=train_transform_param, batch_sampler=batch_sampler)
 
-    VGGNetBody(net, from_layer='data', fully_conv=True, reduced=True, dilated=True,
-        dropout=False)
-
+    reduceVGGNetBody(net, from_layer='data', fully_conv=True, reduced=True, dilated=True, dropout=False)
+    # VGGNetBody(net, from_layer='data', fully_conv=True, reduced=True, dilated=True,dropout=False)
+    # getMobileNetV1(net)
     AddExtraLayers(net, cf.useBatchnorm, lr_mult=cf.lrMult)
-
+    #
     mbox_layers = addSSDHeaderLayer(net)
-
-    # Create the MultiBoxLossLayer.
+    #
+    # # Create the MultiBoxLossLayer.
     name = "mbox_loss"
     mbox_layers.append(net.label)
     net[name] = L.MultiBoxLoss(*mbox_layers, multibox_loss_param=multibox_loss_param,
@@ -209,8 +211,8 @@ def create_test_net():
             train=False, output_label=True, label_map_file=label_map_file,
             transform_param=test_transform_param)
 
-    VGGNetBody(net, from_layer='data', fully_conv=True, reduced=True, dilated=True,
-        dropout=False)
+    reduceVGGNetBody(net, from_layer='data', fully_conv=True, reduced=True, dilated=True, dropout=False)
+    # VGGNetBody(net, from_layer='data', fully_conv=True, reduced=True, dilated=True,dropout=False)
 
     AddExtraLayers(net, cf.useBatchnorm, lr_mult=cf.lrMult)
 
@@ -285,7 +287,7 @@ def create_solver():
     'base_lr': base_lr,
     'weight_decay': 0.0005,
     'lr_policy': "multistep",
-    'stepvalue': [8000, 10000, 12000, 20000, 40000, 60000],
+    'stepvalue': cf.stepValue,
     'gamma': 0.1,
     'momentum': 0.9,
     'iter_size': iter_size,
@@ -324,7 +326,9 @@ def create_solver():
         if iter > max_iter:
           max_iter = iter
 
-    train_src_param = '--weights="{}" \\\n'.format(cf.preTrainModel)
+    train_src_param = None
+    if cf.preTrainModel is not None:
+        train_src_param = '--weights="{}" \\\n'.format(cf.preTrainModel)
     if cf.resumeTraining:
       if max_iter > 0:
         train_src_param = '--snapshot="{}_iter_{}.solverstate" \\\n'.format(snapshot_prefix, max_iter)
@@ -347,7 +351,8 @@ def create_solver():
     with open(job_file, 'w') as f:
       f.write('./caffe_ssd/build/tools/caffe train \\\n')
       f.write('--solver="{}" \\\n'.format(solver_file))
-      f.write(train_src_param)
+      if train_src_param is not None:
+        f.write(train_src_param)
       if solver_param['solver_mode'] == P.Solver.GPU:
         f.write('--gpu {} 2>&1 | tee {}/{}.log\n'.format(cf.gpus, job_dir, model_name))
       else:
@@ -361,7 +366,7 @@ if __name__ == '__main__':
     py_file = os.path.abspath(__file__)
     shutil.copy(py_file, job_dir)
 
-    # Run the job.
+    # # Run the job.
     os.chmod(job_file, stat.S_IRWXU)
     if cf.runSoon:
       subprocess.call(job_file, shell=True)

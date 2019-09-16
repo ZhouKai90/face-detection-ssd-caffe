@@ -3,9 +3,9 @@
 
 #include <string>
 
-#define FACE_SCORE 0.8
+#define FACE_SCORE 0.5
 
-#define MAX_IMG 800
+#define MAX_IMG 512
 
 const std::string ROOT_PATH = "/kyle/workspace/project/face-detection-ssd-caffe";
 const std::string MODEL_PATH = ROOT_PATH + "/models/deploy";

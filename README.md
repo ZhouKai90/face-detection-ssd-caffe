@@ -29,7 +29,7 @@ Both python and c++ demo are provided.
 cd demo/cpp
 mkdir build
 cd build && cmake .. && make && cd ..
-./build/demo/target ../../images
+./build/demo ../../images
 
 #for python
 python3 demo/python/ssd_detect_face.py

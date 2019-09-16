@@ -8,13 +8,16 @@ config = edict()
 
 # The database file for training and test data. Created by tools/create_data.sh
 # config.trainData = 'data/widerface/widerface_trainval_lmdb'
-config.trainData = 'data/lmdb/train_clean_devkit_train_lmdb'
+config.trainData = 'data/clean_devkit/train_clean_devkit_train_lmdb'
 # config.testData = 'data/widerface/widerface_test_lnval_lmdb'
-config.testData = 'data/lmdb/train_clean_devkit_test_lmdb'
+config.testData = 'data/clean_devkit/train_clean_devkit_test_lmdb'
 config.modelPrefix = 'VGG16'
-config.savePath = 'models/widerface'
+# config.savePath = 'models/test'
+config.savePath = 'models/widerface_halfVGG16'
 # The pretrained model. We use the Fully convolutional reduced (atrous) VGGNet.
-config.preTrainModel = 'models/VGGNet/VGG_ILSVRC_16_layers_fc_reduced.caffemodel'
+config.preTrainModel = None
+# config.preTrainModel = 'models/VGGNet/VGG16_SSD_300x300_iter_2800.caffemodel'
+
 config.dataPath = 'data/widerface'
 
 config.gpus = "0,1"
@@ -31,6 +34,7 @@ config.testBatchSize = 8
 config.numTestImg = 930
 config.baseLr = 0.0004
 config.maxIter = 60000
+config.stepValue = [2000, 8000, 10000, 12000, 20000, 40000, 60000]
 config.snapshot = 200
 config.testInterval = 100
 config.display = 10
@@ -84,7 +88,7 @@ label_map_file = "{}/labelmap_voc.prototxt".format(config.dataPath)
 check_if_exist(config.trainData)
 check_if_exist(config.testData)
 check_if_exist(label_map_file)
-check_if_exist(config.preTrainModel)
+#check_if_exist(config.preTrainModel)
 make_if_not_exist(save_dir)
 make_if_not_exist(job_dir)
 make_if_not_exist(snapshot_dir)

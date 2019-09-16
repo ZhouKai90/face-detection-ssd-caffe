@@ -69,7 +69,7 @@ class CaffeDetection:
         self.labelmap = caffe_pb2.LabelMap()
         text_format.Merge(str(file.read()), self.labelmap)
 
-    def detect(self, image_file, conf_thresh=0.1, topn=100):
+    def detect(self, image_file, conf_thresh=0.8, topn=100):
         '''
         SSD detection
         '''
@@ -205,12 +205,10 @@ def parse_args():
     parser.add_argument('--labelmap_file',
                         default=os.path.join(os.getcwd(), '../../', 'models/deploy/labelmap_face.prototxt'))
     parser.add_argument('--model_def',
-                       default=os.path.join(os.getcwd(), '../../', 'models/deploy/ssd_vgg16_512.prototxt'))
-                    #    default=os.path.join(os.getcwd(), '../', 'models/inception_ssd_640.prototxt'))
+                       default=os.path.join(os.getcwd(), '../../', 'models/deploy/half_VGG16_SSD_300.prototxt'))
     parser.add_argument('--data_shape', default=(300, 300), type=int)
     parser.add_argument('--model_weights',
-                        default=os.path.join(os.getcwd(), '../../', 'models/deploy/ssd_vgg16_512.caffemodel'))
-                        # default=os.path.join(os.getcwd(), '../', 'models/inception_ssd_640.caffemodel'))
+                        default=os.path.join(os.getcwd(), '../../', 'models/deploy/half_VGG16_SSD_300.caffemodel'))
     parser.add_argument('--save_path', default=os.path.join(os.getcwd(), '../../', 'output/'))
     parser.add_argument('--image_dir', default=os.path.join(os.getcwd(), '../../', 'images/'))
     return parser.parse_args()
