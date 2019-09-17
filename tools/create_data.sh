@@ -1,8 +1,8 @@
-cur_dir=$(cd $( dirname ${BASH_SOURCE[0]} ) && pwd )
+cur_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 echo $cur_dir
 root_dir=$cur_dir/..
 
-cd $root_dir
+cd $root_dir/
 
 redo=1
 data_root_dir="$root_dir/data/VOCdevkit"

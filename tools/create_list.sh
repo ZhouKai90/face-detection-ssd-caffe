@@ -1,5 +1,5 @@
 #!/bin/bash
-bash_dir=$(cd $( dirname ${BASH_SOURCE[0]} ) && pwd )
+bash_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 root_dir=$bash_dir/..
 data_dir=$root_dir/data/VOCdevkit
 sub_dir=ImageSets/Main
@@ -41,13 +41,13 @@ do
   done
 
   # Generate image name and size infomation.
-  if [ $dataset == "test" ]
+  if [ $dataset=="test" ]
   then
     $root_dir/caffe_ssd/build/tools/get_image_size $data_dir $dst_file $root_dir/data/$dataset_name/$dataset"_name_size.txt"
   fi
 
   # Shuffle trainval file.
-  if [ $dataset == "trainval" ]
+  if [ $dataset=="trainval" ]
   then
     rand_file=$dst_file.random
     cat $dst_file | perl -MList::Util=shuffle -e 'print shuffle(<STDIN>);' > $rand_file

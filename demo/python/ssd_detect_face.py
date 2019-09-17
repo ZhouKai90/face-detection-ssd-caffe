@@ -205,10 +205,10 @@ def parse_args():
     parser.add_argument('--labelmap_file',
                         default=os.path.join(os.getcwd(), '../../', 'models/deploy/labelmap_face.prototxt'))
     parser.add_argument('--model_def',
-                       default=os.path.join(os.getcwd(), '../../', 'models/deploy/half_VGG16_SSD_300.prototxt'))
+                       default=os.path.join(os.getcwd(), '../../', 'models/deploy/VGG16_SSD_512.prototxt'))
     parser.add_argument('--data_shape', default=(300, 300), type=int)
     parser.add_argument('--model_weights',
-                        default=os.path.join(os.getcwd(), '../../', 'models/deploy/half_VGG16_SSD_300.caffemodel'))
+                        default=os.path.join(os.getcwd(), '../../', 'models/deploy/VGG16_SSD_512.caffemodel'))
     parser.add_argument('--save_path', default=os.path.join(os.getcwd(), '../../', 'output/'))
     parser.add_argument('--image_dir', default=os.path.join(os.getcwd(), '../../', 'images/'))
     return parser.parse_args()
