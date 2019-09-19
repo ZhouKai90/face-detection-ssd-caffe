@@ -150,44 +150,20 @@ def reduceVGGNetBody(net, from_layer, need_fc=True, fully_conv=False, reduced=Fa
 # Add extra layers on top of a "base" network (e.g. VGGNet or Inception).
 def AddExtraLayers(net, use_batchnorm=True, lr_mult=1):
     use_relu = True
-
     # Add additional convolutional layers.
     from_layer = net.keys()[-1]
     # TODO(weiliu89): Construct the name using the last layer to avoid duplication.
-    out_layer = "multi_feat_1_conv_1x1"
-    ConvBNLayer(net, from_layer, out_layer, use_batchnorm, use_relu, 128, 1, 0, 1, lr_mult=lr_mult)
-    from_layer = out_layer
-    out_layer = "multi_feat_1_conv_3x3"
-    ConvBNLayer(net, from_layer, out_layer, use_batchnorm, use_relu, 256, 3, 1, 2, lr_mult=lr_mult)
-
-    from_layer = out_layer
-    out_layer = "multi_feat_2_conv_1x1"
-    ConvBNLayer(net, from_layer, out_layer, use_batchnorm, use_relu, 128, 1, 0, 1, lr_mult=lr_mult)
-    from_layer = out_layer
-    out_layer = "multi_feat_2_conv_3x3"
-    ConvBNLayer(net, from_layer, out_layer, use_batchnorm, use_relu, 256, 3, 1, 2, lr_mult=lr_mult)
-
-    from_layer = out_layer
-    out_layer = "multi_feat_3_conv_1x1"
-    ConvBNLayer(net, from_layer, out_layer, use_batchnorm, use_relu, 128, 1, 0, 1, lr_mult=lr_mult)
-    from_layer = out_layer
-    out_layer = "multi_feat_3_conv_3x3"
-    ConvBNLayer(net, from_layer, out_layer, use_batchnorm, use_relu, 256, 3, 0, 1, lr_mult=lr_mult)
-
-    from_layer = out_layer
-    out_layer = "multi_feat_4_conv_1x1"
-    ConvBNLayer(net, from_layer, out_layer, use_batchnorm, use_relu, 128, 1, 0, 1, lr_mult=lr_mult)
-    from_layer = out_layer
-    out_layer = "multi_feat_4_conv_3x3"
-    ConvBNLayer(net, from_layer, out_layer, use_batchnorm, use_relu, 256, 3, 0, 1, lr_mult=lr_mult)
-
-    from_layer = out_layer
-    out_layer = "multi_feat_5_conv_1x1"
-    ConvBNLayer(net, from_layer, out_layer, use_batchnorm, use_relu, 128, 1, 0, 1, lr_mult=lr_mult)
-    from_layer = out_layer
-    out_layer = "multi_feat_5_conv_3x3"
-    ConvBNLayer(net, from_layer, out_layer, use_batchnorm, use_relu, 256, 3, 0, 1, lr_mult=lr_mult)
-
+    for i in range(1, 6):
+        out_layer = "multi_feat_{}_conv_1x1".format(i)
+        ConvBNLayer(net, from_layer, out_layer, use_batchnorm, use_relu, num_output=128,
+                    kernel_size=1, pad=0, stride=1, lr_mult=lr_mult)
+        from_layer = out_layer
+        pad = 0 if i > 2 else 1
+        stride = 1 if i > 2 else 2
+        out_layer = "multi_feat_{}_conv_3x3".format(i)
+        ConvBNLayer(net, from_layer, out_layer, use_batchnorm, use_relu, num_output=128,
+                    kernel_size=1, pad=pad, stride=stride, lr_mult=lr_mult)
+        from_layer = out_layer
     return net
 
 def addSSDHeaderLayer(net):
@@ -215,20 +191,18 @@ def addSSDHeaderLayer(net):
     # max_sizes = [CF.minDim * 20 / 100.] + max_sizes
     steps = [8, 16, 32, 64, 128, 256, 512]
     aspect_ratios = [[1], [1], [1], [1], [1], [1], [1]]
-    # L2 normalize conv4_3.
+    # L2 normalize .
     normalizations = [20, -1, -1, -1, -1, -1, -1]
     # variance used to encode/decode prior bboxes.
-    if CF.LOSS_PARA.background_label_id == P.PriorBox.CENTER_SIZE:
+    if CF.LOSS_PARA.code_type == P.PriorBox.CENTER_SIZE:
       prior_variance = [0.1, 0.1, 0.2, 0.2]
     else:
       prior_variance = [0.1]
 
-    flip = False
-    clip = False
     mbox_layers = CreateMultiBoxHead(net, data_layer='data', from_layers=mbox_source_layers,
             use_batchnorm=CF.useBatchnorm, min_sizes=min_sizes, max_sizes=max_sizes,
             aspect_ratios=aspect_ratios, steps=steps, normalizations=normalizations,
-            num_classes=CF.numClasses, share_location=CF.LOSS_PARA.share_location, flip=flip, clip=clip,
+            num_classes=CF.numClasses, share_location=CF.LOSS_PARA.share_location, flip=False, clip=False,
             prior_variance=prior_variance, kernel_size=3, pad=1, lr_mult=CF.lrMult)
     return mbox_layers
 

@@ -27,9 +27,13 @@ config.maxAspectRatio = 1.5
 config.numClasses = 2
 config.testBatchSize = 16
 config.numTestImg = 930
-config.baseLr = 0.002
+#params for learn rate
+config.baseLr = 0.0004     # *2.5
+config.lrPolicy = 'multistep'
+config.lrGamma = 0.8
+config.stepValue = [30000, 40000, 45000, 50000, 550000, 60000]
+
 config.maxIter = 60000
-config.stepValue = [10000, 20000, 40000, 60000]
 config.snapshot = 1000
 config.testInterval = 200
 

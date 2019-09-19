@@ -128,8 +128,8 @@ def create_train_net():
         },
         'expand_param': {
             'prob': 0.5,                #expand发生的概率
-            'max_expand_ratio': 2.0,    #expand扩大的倍数
-            # 'max_expand_ratio': 4.0,    #expand扩大的倍数
+            # 'max_expand_ratio': 2.0,    #expand扩大的倍数
+            'max_expand_ratio': 4.0,    #expand扩大的倍数
         },
         'emit_constraint': {
             'emit_type': caffe_pb2.EmitConstraint.CENTER,
@@ -289,9 +289,9 @@ def create_solver():
     # Train parameters
     'base_lr': base_lr,
     'weight_decay': 0.0005,
-    'lr_policy': "multistep",
+    'lr_policy': CF.lrPolicy,
     'stepvalue': CF.stepValue,
-    'gamma': 0.1,
+    'gamma': CF.lrGamma,
     'momentum': 0.9,
     'iter_size': CF.iter_size,
     'max_iter': CF.maxIter,
