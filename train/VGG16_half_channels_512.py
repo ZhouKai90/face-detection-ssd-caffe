@@ -161,8 +161,8 @@ def AddExtraLayers(net, use_batchnorm=True, lr_mult=1):
         pad = 0 if i > 2 else 1
         stride = 1 if i > 2 else 2
         out_layer = "multi_feat_{}_conv_3x3".format(i)
-        ConvBNLayer(net, from_layer, out_layer, use_batchnorm, use_relu, num_output=128,
-                    kernel_size=1, pad=pad, stride=stride, lr_mult=lr_mult)
+        ConvBNLayer(net, from_layer, out_layer, use_batchnorm, use_relu, num_output=256,
+                    kernel_size=3, pad=pad, stride=stride, lr_mult=lr_mult)
         from_layer = out_layer
     return net
 

@@ -56,9 +56,8 @@ class CaffeDetection:
         self.transformer = caffe.io.Transformer({'data': (1, 3, data_shape[0], data_shape[1])})
         # self.transformer = caffe.io.Transformer({'data': self.net.blobs['data'].data.shape})
         self.transformer.set_transpose('data', (2, 0, 1))
-        self.transformer.set_mean('data', np.array([127.5, 127.5, 127.5])) # mean pixel
+        # self.transformer.set_mean('data', np.array([127.5, 127.5, 127.5])) # mean pixel
         # the reference model operates on images in [0,255] range instead of [0,1]
-        #self.transformer.set_raw_scale('data', 255)
         self.transformer.set_input_scale('data', 0.007843)
         self.transformer.set_raw_scale('data', 255)
         # the reference model has channels in BGR order instead of RGB
@@ -76,7 +75,7 @@ class CaffeDetection:
         # set net to batch size of 1
         # print(self.data_shape)
         self.net.blobs['data'].reshape(1, 3, self.data_shape[0], self.data_shape[1])
-        image = caffe.io.load_image(image_file)
+        image = caffe.io.load_image(image_file) * 255
 
         #Run the net and examine the top_k results
         transformed_image = self.transformer.preprocess('data', image)
@@ -115,37 +114,7 @@ class CaffeDetection:
             label_name = top_labels[i]
             result.append([xmin, ymin, xmax, ymax, label, score, label_name])
         return result
-def insertObject(doc, datas, class_name):
-    obj = doc.createElement('object')
-    name = doc.createElement('name')
-    name.appendChild(doc.createTextNode(class_name))
-    obj.appendChild(name)
-    pose = doc.createElement('pose')
-    pose.appendChild(doc.createTextNode('Unspecified'))
-    obj.appendChild(pose)
-    truncated = doc.createElement('truncated')
-    truncated.appendChild(doc.createTextNode(str(0)))
-    obj.appendChild(truncated)
-    difficult = doc.createElement('difficult')
-    difficult.appendChild(doc.createTextNode(str(0)))
-    obj.appendChild(difficult)
-    bndbox = doc.createElement('bndbox')
-    
-    xmin = doc.createElement('xmin')
-    xmin.appendChild(doc.createTextNode(str(int(datas[0]))))
-    bndbox.appendChild(xmin)
-    
-    ymin = doc.createElement('ymin')                
-    ymin.appendChild(doc.createTextNode(str(int(datas[1]))))
-    bndbox.appendChild(ymin)                
-    xmax = doc.createElement('xmax')                
-    xmax.appendChild(doc.createTextNode(str(int(datas[2]))))
-    bndbox.appendChild(xmax)                
-    ymax = doc.createElement('ymax')
-    ymax.appendChild(doc.createTextNode(str(int(datas[3]))))
-    bndbox.appendChild(ymax)
-    obj.appendChild(bndbox)                
-    return obj
+
 def main(args):
     '''main '''
     detection = CaffeDetection(args.gpu_id,
@@ -205,10 +174,10 @@ def parse_args():
     parser.add_argument('--labelmap_file',
                         default=os.path.join(os.getcwd(), '../../', 'models/deploy/labelmap_face.prototxt'))
     parser.add_argument('--model_def',
-                       default=os.path.join(os.getcwd(), '../../', 'models/deploy/VGG16_SSD_512.prototxt'))
-    parser.add_argument('--data_shape', default=(300, 300), type=int)
+                       default=os.path.join(os.getcwd(), '../../', 'models/deploy/half_VGG16_SSD_512.prototxt'))
+    parser.add_argument('--data_shape', default=(512, 512), type=int)
     parser.add_argument('--model_weights',
-                        default=os.path.join(os.getcwd(), '../../', 'models/deploy/VGG16_SSD_512.caffemodel'))
+                        default=os.path.join(os.getcwd(), '../../', 'models/deploy/half_VGG16_SSD_512.caffemodel'))
     parser.add_argument('--save_path', default=os.path.join(os.getcwd(), '../../', 'output/'))
     parser.add_argument('--image_dir', default=os.path.join(os.getcwd(), '../../', 'images/'))
     return parser.parse_args()

@@ -16,7 +16,7 @@ class SingleDetector {
 public:
     SingleDetector(const std::string& prototxtFile,
             const std::string& caffemodelFile);
-    ~SingleDetector(){printf("~SingleDetector\n");};
+    ~SingleDetector(){std::cout << "~SingleDetector" << std::endl;};
     std::vector<facesPerImg_t> run(const std::vector<cv::Mat>& imgs);
 
 private:
@@ -28,7 +28,6 @@ private:
     shared_ptr<Net<float>> net_;
     cv::Size inputGeometry_;
     int numChannles_;
-    double resizeFactor_;
 };
 
 #endif
